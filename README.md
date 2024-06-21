@@ -1,5 +1,5 @@
 # GeSeqFold
-GeSeqFold is a robust tool designed to process transcriptomic data and perform differential gene expression analysis using linear models. It aims to provide researchers with a streamlined, efficient way to analyze RNA-seq data, delivering clear insights into gene expression changes under various conditions. Ideal for both novice and experienced researchers, GeSeqFold ensures accurate and insightful analysis of transcriptomic datasets.
+GeSeqFold is a robust tool designed to process transcriptomic data and perform differential gene expression analysis using linear regression models. It aims to provide researchers with a streamlined, efficient way to analyze RNA-seq data, delivering clear insights into gene expression changes under various conditions. Ideal for both novice and experienced researchers, GeSeqFold ensures accurate and insightful analysis of transcriptomic datasets.
 
 **Installation:**
 
