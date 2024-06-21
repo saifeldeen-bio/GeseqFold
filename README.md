@@ -6,7 +6,7 @@ GeSeqFold is a robust tool designed to process transcriptomic data and perform d
 ```bash
 git clone https://github.com/saifeldeen-bio/GeSeqFold.git
 cd GeSeqFold/
-sudo mv GenomeScratch ../path-to/usr/bin
+sudo mv GeSeqFold ../path-to/usr/bin
 ```
 **Usage:**
 
