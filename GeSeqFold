@@ -7,24 +7,24 @@
 # This script is not intended for commercial use                                                    #
 #####################################################################################################
 #----------------------------- Usage and Help ----------------------#
-helptext = """GeSeqFold is a robust tool designed to process transcriptomic data and perform differential gene expression analysis using linear models. 
+helptext = """GeSeqFold is a robust tool designed to process transcriptomic data and perform differential gene expression analysis using linear regression models. 
 It aims to provide researchers with a streamlined, efficient way to analyze RNA-seq data, delivering clear insights into gene expression changes under various conditions.
 
-Usage: GeSeqFold -h [manual] -c <CountMatrix> -m <MetaData> -fl <FiltrationLevel> -g1 <group 1> -g2 <group 2> -fdr <FDRcutoff> -ng <nSigGenes> -hm <HeatMapMetric> -o <outputDir>
+Usage: GeSeqFold -h [manual] -c <Count Matrix> -m <Meta Data> -fl <Filtration Level> -g1 <Group 1> -g2 <Group 2> -fdr <FDR Cutoff> -ng <nGenes> -hm <HeatMap Metric> -o <Output Dir>
 
 Parameters: <CountMatrix> <MetaData> <FiltrationLevel> <group 1> <group 2> <FDRcutoff> <nSigGenes> <HeatMapMetric> <outputDir>
 
 Options:
 -h   --help           [manual]              Manual help
--c   --count          <CountMatrix>         Count matrix [File: Must be in a tsv or a csv format]
--m   --meta           <MetaData>            Meta data consisting of two columns 'SAMPLE and STATE' [File: Must be in a tsv or a csv format] 
--fl  --filter         <filtrationLevel>     Pre filtration level to filter low expressed genes which make outliers in the Data [Int: 10, 20, 30]
--g1  --group1          <group 1>            The first or refrence group of samples in the experimental design [Str: Control, Normal, Treatment1,..]
--g2  --group2          <group 2>            The second group of samples in the meta data experimental design [Str: Disease, Infection, Treatment2,..]
--fdr --fdr            <FDRcutoff>           The level of significance utilized in the Analysis [Float: 0.05, 0.01]
--ng  --ngenes         <nSigGenes>           The number of significant genes to visualize [int: 100, 200, ....]
--hm  --hmat           <HeatMapMetric>       The HeatMap Metric used in the HeatMap [Str: euclidean, correlation]
--o   --out            <outputDir>           Output directory
+-c   --count          <Count Matrix>        Count matrix [File: Must be in a tsv or a csv format]
+-m   --meta           <Meta Data>           Meta data consisting of two columns 'SAMPLE and STATE' [File: Must be in a tsv or a csv format] 
+-fl  --filter         <Filtration Level>    Pre filtration level to filter low expressed genes which make outliers in the Data [Int: 10, 20, 30]
+-g1  --group1         <Group 1>             The first or refrence group of samples in the experimental design [Str: Control, Normal, Treatment1,..]
+-g2  --group2         <Group 2>             The second group of samples in the meta data experimental design [Str: Disease, Infection, Treatment2,..]
+-fdr --fdr            <FDR cutoff>          The level of significance utilized in the Analysis [Float: 0.05, 0.01]
+-ng  --ngenes         <nGenes>              The number of significant genes to visualize [int: 100, 200, ....]
+-hm  --hmat           <HeatMap Metric>      The HeatMap Metric used in the HeatMap [Str: euclidean, correlation]
+-o   --out            <Output Dir>          Output directory
 
 "© Saifeldeen M. Ibrahim 2024"
 """
@@ -44,7 +44,7 @@ try:
     if countoption == '-c' or countoption == '--count':
         pass
     else:
-        print("[ERROR]: Invalid option <CountMatrix>")
+        print("[ERROR]: Invalid option <Count Matrix>")
         exit(1)
 except:
     print("[ERROR]: Please Import the count matrix")
@@ -61,7 +61,7 @@ try:
     if metaoption == "-m" or metaoption == "--meta":
         pass
     else:
-        print("[ERROR]: Invalid option <MetaData>")
+        print("[ERROR]: Invalid option <Meta Data>")
         exit(1)
 except:
     print("[ERROR]: Please import the meta-data")
@@ -78,7 +78,7 @@ try:
     if filteroption == '-fl' or filteroption == '--filter':
         pass            
     else:
-        print("[ERROR]: Invalid option <filtrationLevel>")
+        print("[ERROR]: Invalid option <Filtration level>")
         exit(1)
 except:
     print("[ERROR]: Please select the filtraion level")
@@ -95,7 +95,7 @@ try:
     if groupIoption == '-g1' or groupIoption == '--group1':
         pass    
     else:
-        print("[ERROR]: Invalid option <group 1>")
+        print("[ERROR]: Invalid option <Group 1>")
         exit(1)
 except:
     print("[ERROR]: Please specify the refrences group")
@@ -112,7 +112,7 @@ try:
     if groupIIoption == '-g2' or groupIIoption == '--group2':
         pass    
     else:
-        print("[ERROR]: Invalid option <group 2>")
+        print("[ERROR]: Invalid option <Group 2>")
         exit(1)
 except:
     print("[ERROR]: Please specify the second group")
@@ -129,7 +129,7 @@ try:
     if fdrOption == '-fdr' or fdrOption == '--fdr':
         pass    
     else:
-        print("[ERROR]: Invalid option <FDRcutoff>")
+        print("[ERROR]: Invalid option <FDR Cutoff>")
         exit(1)
 except:
     print("[ERROR]: Please set an FDR threshold")
@@ -146,7 +146,7 @@ try:
     if ngenesoption == '-ng' or ngenesoption == '--ngenes':
         pass    
     else:
-        print("[ERROR]: Invalid option <nSigGenes>")
+        print("[ERROR]: Invalid option <nGenes>")
         exit(1)
 except:
     print("[ERROR]: Please specify the number of significant genes to investigate")
@@ -163,7 +163,7 @@ try:
     if hmoption == '-hm' or hmoption == '--hmat':
         pass    
     else:
-        print("[ERROR]: Invalid option <HeatMapMetric>")
+        print("[ERROR]: Invalid option <HeatMap Metric>")
         exit(1)
 except:
     print("[ERROR]: Please specify the HeatMap metric")
@@ -180,7 +180,7 @@ try:
     if outoption == '-o' or outoption == '--out':
         pass    
     else:
-        print("[ERROR]: Invalid option <outputDir>")
+        print("[ERROR]: Invalid option <Output Dir>")
         exit(1)
 except:
     print("[ERROR]: Please specify the output directory")
