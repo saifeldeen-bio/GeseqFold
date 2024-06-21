@@ -1,0 +1,413 @@
+#!/usr/bin/python3
+############################################## About Author #########################################
+# Created by: Saifeldeen M. Ibrahim                                                                 #
+# Emails: saifeldeen.ibrahim [at] ageri.sci.eg or saifeldeenmib99 [at] gmail.com                    #
+# License: MIT License - https://opensource.org/licenses/MIT                                        #
+# Disclaimer: The script comes with no warranty, use at your own risk                               #
+# This script is not intended for commercial use                                                    #
+#####################################################################################################
+#----------------------------- Usage and Help ----------------------#
+helptext = """GeSeqFold is a robust tool designed to process transcriptomic data and perform differential gene expression analysis using linear models. 
+It aims to provide researchers with a streamlined, efficient way to analyze RNA-seq data, delivering clear insights into gene expression changes under various conditions.
+
+Usage: GeSeqFold -h [manual] -c <CountMatrix> -m <MetaData> -fl <FiltrationLevel> -g1 <group 1> -g2 <group 2> -fdr <FDRcutoff> -ng <nSigGenes> -hm <HeatMapMetric> -o <outputDir>
+
+Parameters: <CountMatrix> <MetaData> <FiltrationLevel> <group 1> <group 2> <FDRcutoff> <nSigGenes> <HeatMapMetric> <outputDir>
+
+Options:
+-h   --help           [manual]              Manual help
+-c   --count          <CountMatrix>         Count matrix [File: Must be in a tsv or a csv format]
+-m   --meta           <MetaData>            Meta data consisting of two columns 'SAMPLE and STATE' [File: Must be in a tsv or a csv format] 
+-fl  --filter         <filtrationLevel>     Pre filtration level to filter low expressed genes which make outliers in the Data [Int: 10, 20, 30]
+-g1  --group1          <group 1>            The first or refrence group of samples in the experimental design [Str: Control, Normal, Treatment1,..]
+-g2  --group2          <group 2>            The second group of samples in the meta data experimental design [Str: Disease, Infection, Treatment2,..]
+-fdr --fdr            <FDRcutoff>           The level of significance utilized in the Analysis [Float: 0.05, 0.01]
+-ng  --ngenes         <nSigGenes>           The number of significant genes to visualize [int: 100, 200, ....]
+-hm  --hmat           <HeatMapMetric>       The HeatMap Metric used in the HeatMap [Str: euclidean, correlation]
+-o   --out            <outputDir>           Output directory
+
+"© Saifeldeen M. Ibrahim 2024"
+"""
+usage = """Usage: GeSeqFold -h [manual] -c <CountMatrix> -m <MetaData> -fl <FiltrationLevel> -g1 <group 1> -g2 <group 2> -fdr <FDRcutoff> -ng <nSigGenes> -hm <HeatMapMetric> -o <outputDir>"""
+#----------------------------- Import Modules ----------------------#
+import os
+import sys
+if len(sys.argv) == 1:
+    print(usage)
+    exit(0)
+elif len(sys.argv) == 2 and sys.argv[1] == "-h" or sys.argv[1] == "--help":
+    print(helptext)
+    exit(0)
+# ########################################## input parameters ##################################
+try:
+    countoption = sys.argv[1]
+    if countoption == '-c' or countoption == '--count':
+        pass
+    else:
+        print("[ERROR]: Invalid option <CountMatrix>")
+        exit(1)
+except:
+    print("[ERROR]: Please Import the count matrix")
+    print(usage)
+    exit(1)
+try:
+    count = sys.argv[2]
+except:
+    print("[ERROR]: Please Import the count matrix")
+    print(usage)
+    exit(1)
+try:
+    metaoption = sys.argv[3]
+    if metaoption == "-m" or metaoption == "--meta":
+        pass
+    else:
+        print("[ERROR]: Invalid option <MetaData>")
+        exit(1)
+except:
+    print("[ERROR]: Please import the meta-data")
+    print(usage)
+    exit(1)        
+try:
+    meta = sys.argv[4]
+except:
+    print("[ERROR]: Please import the meta-data")
+    print(usage)
+    exit(1)
+try:
+    filteroption = sys.argv[5]
+    if filteroption == '-fl' or filteroption == '--filter':
+        pass            
+    else:
+        print("[ERROR]: Invalid option <filtrationLevel>")
+        exit(1)
+except:
+    print("[ERROR]: Please select the filtraion level")
+    print(usage)
+    exit(1)            
+try:
+    filterleve = int(sys.argv[6])
+except:
+    print("[ERROR]: Please select the filtraion level")
+    print(usage)
+    exit(1)
+try:
+    groupIoption = sys.argv[7]
+    if groupIoption == '-g1' or groupIoption == '--group1':
+        pass    
+    else:
+        print("[ERROR]: Invalid option <group 1>")
+        exit(1)
+except:
+    print("[ERROR]: Please specify the refrences group")
+    print(usage)
+    exit(1)
+try:    
+    groupI = sys.argv[8]
+except:
+    print("[ERROR]: Please specify the refrences group")
+    print(usage)
+    exit(1)
+try:
+    groupIIoption = sys.argv[9]
+    if groupIIoption == '-g2' or groupIIoption == '--group2':
+        pass    
+    else:
+        print("[ERROR]: Invalid option <group 2>")
+        exit(1)
+except:
+    print("[ERROR]: Please specify the second group")
+    print(usage)
+    exit(1)
+try:    
+    groupII = sys.argv[10]
+except:
+    print("[ERROR]: Please specify the second group")
+    print(usage)
+    exit(1)
+try:
+    fdrOption = sys.argv[11]
+    if fdrOption == '-fdr' or fdrOption == '--fdr':
+        pass    
+    else:
+        print("[ERROR]: Invalid option <FDRcutoff>")
+        exit(1)
+except:
+    print("[ERROR]: Please set an FDR threshold")
+    print(usage)
+    exit(1)
+try:    
+    fdr = eval(sys.argv[12])
+except:
+    print("[ERROR]: Please et an FDR threshold")
+    print(usage)
+    exit(1)
+try:
+    ngenesoption = sys.argv[13]
+    if ngenesoption == '-ng' or ngenesoption == '--ngenes':
+        pass    
+    else:
+        print("[ERROR]: Invalid option <nSigGenes>")
+        exit(1)
+except:
+    print("[ERROR]: Please specify the number of significant genes to investigate")
+    print(usage)
+    exit(1)
+try:    
+    ngenes = int(sys.argv[14])
+except:
+    print("[ERROR]: Please specify the number of significant genes to investigate")
+    print(usage)
+    exit(1)
+try:
+    hmoption = sys.argv[15]
+    if hmoption == '-hm' or hmoption == '--hmat':
+        pass    
+    else:
+        print("[ERROR]: Invalid option <HeatMapMetric>")
+        exit(1)
+except:
+    print("[ERROR]: Please specify the HeatMap metric")
+    print(usage)
+    exit(1)
+try:    
+    heatmapMetric = sys.argv[16]
+except:
+    print("[ERROR]: Please specify the HeatMap metric")
+    print(usage)
+    exit(1)
+try:
+    outoption = sys.argv[17]
+    if outoption == '-o' or outoption == '--out':
+        pass    
+    else:
+        print("[ERROR]: Invalid option <outputDir>")
+        exit(1)
+except:
+    print("[ERROR]: Please specify the output directory")
+    print(usage)
+    exit(1)
+try:    
+    outDir = sys.argv[18]
+except:
+    print("[ERROR]: Please specify the output directory")
+    print(usage)
+    exit(1)
+#----------------------------- Import Modules ----------------------#
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from statsmodels.stats.multitest import multipletests
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+from scipy.stats import norm
+import matplotlib.patches as mpatches
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+import multiprocessing
+from joblib import Parallel, delayed
+from sklearn.manifold import MDS
+#----------------------------- Import Counts & Meta Data ----------------------#
+print("Import Counts & Meta Data")
+if '.tsv' in count:
+    dataname = count.replace('.tsv', '') 
+elif '.csv' in count:
+    dataname = count.replace('.csv', '')
+os.makedirs(outDir, exist_ok=True)
+if '.tsv' in count:
+    counts = pd.read_csv(count, sep='\t', index_col=0, header= 0)
+elif '.csv' in count:
+    counts = pd.read_csv(count, sep=',', index_col=0, header= 0)
+print(counts)
+if '.tsv' in meta:
+    meta_data = pd.read_csv(meta, sep='\t', index_col=0, header= 0)
+elif '.csv' in meta:
+    meta_data = pd.read_csv(meta, sep=',', index_col=0, header= 0)
+print(meta_data)
+#----------------------------- Pre Filtering ----------------------#
+print(f"Filtering step: Retaining genes with an average count greater than {filterleve} across all samples.")
+keep = (counts.sum(axis=1) / counts.shape[1]) > filterleve
+counts = counts[keep]
+# #----------------------------- Differential Gene Expression Analysis----------------------#
+# Normalize counts by library size
+print("Normalize counts by library size (cpm)")
+norm_counts = counts.div(counts.sum(axis=0), axis=1) * 1e6
+# Log transformation
+print("Log transformation")
+log_counts = np.log1p(norm_counts + 1)
+# Create design matrix
+print("Design matrix")
+meta_data['intercept'] = 1
+meta_data['Condition_Treatment'] = (meta_data['STATE'] == groupII).astype(int)
+design_matrix = meta_data
+# Perform differential expression analysis
+print("Differential expression analysis")
+# Fit linear model and get p-values
+results = pd.DataFrame(index=counts.index, columns=['pvalue', 'log2FoldChange'])
+# Define a function to fit model for a gene
+def fit_model(gene, counts, meta_data):
+    data = pd.DataFrame({
+        'expression': counts.loc[gene],
+        'Condition_Treatment': meta_data['Condition_Treatment'],
+        'intercept': meta_data['intercept']
+    })
+    model = ols('expression ~ Condition_Treatment + intercept', data=data).fit()
+    return gene, model.pvalues['Condition_Treatment'], model.params['Condition_Treatment']
+# Parallel processing
+num_cores = multiprocessing.cpu_count()
+print(f"Parallel processing: {num_cores} cores used")
+print("Fitting the linear model using ordinary least squares")
+results_list = Parallel(n_jobs=num_cores)(
+    delayed(fit_model)(gene, counts, meta_data) for gene in counts.index)
+# Update results DataFrame
+vectorized_arcsinh = np.vectorize(np.arcsinh)
+for gene, pvalue, log2FoldChange in results_list:
+    results.loc[gene, 'pvalue'] = pvalue
+    results.loc[gene, 'log2FoldChange'] = np.arcsinh(log2FoldChange)
+# Adjust p-values for multiple testing using Benjamini-Hochberg FDR
+print("Adjust p-values for multiple testing using Benjamini-Hochberg FDR")
+results['FDR'] = sm.stats.multipletests(results['pvalue'], method='fdr_bh')[1]
+results['exp.direction'] = np.where(results['log2FoldChange'] > 0, 'up', 'down')
+results['software'] = 'GeSeqFold'
+results = results.sort_values('FDR')
+print("Export DEGs results")
+results.to_csv(f'{outDir}/DEGs.csv', index=True)
+# # #----------------------------- Data Transformation & Visualization----------------------
+print("Data Transformation & Visualization")
+print("Export density Plot")
+# Density Plot
+plt.figure(figsize=(10, 6))
+for sample in log_counts.columns:
+    sns.kdeplot(log_counts[sample], label=sample, alpha=0.5)
+plt.title("Density plot of transformed data")
+plt.xlabel("Log(Normalized Counts)")
+plt.ylabel("Density")
+plt.legend()
+plt.savefig(f'{outDir}/density.pdf')
+plt.close()
+print("Export box plot")
+# Box Plot
+plt.figure(figsize=(12, 8))
+sns.boxplot(data= log_counts)
+plt.title("Box Plot of Normalized Data")
+plt.ylabel("Log(Normalized Data)")
+plt.xticks(rotation=90)
+plt.savefig(f'{outDir}/boxplot.pdf')
+plt.close()
+# Heatmap
+print("Export heatmap")
+max_gene = ngenes
+selected_genes = results[results['FDR'] < fdr]
+selected_genes = selected_genes.index[0:max_gene]
+ # Assuming 'log_counts' is your heatmap data and 'meta_data' contains the state information
+heatmap_data = log_counts.loc[selected_genes]
+# Define the color mapping for each state
+state_colors = {
+    "Control": "cyan",
+    "Salinity": "#FF7F50"
+}
+# Create a list of colors for the columns based on the state of each sample
+col_colors = meta_data['STATE'].map(state_colors).values
+# Create a legend for the color annotation
+legend_handles = [mpatches.Patch(color=color, label=state) for state, color in state_colors.items()]
+# Print the dictionary for debugging purposes
+keys = dict(meta_data['STATE'])
+# Create the clustered heatmap with the column colors
+if heatmapMetric == "euclidean":
+    plt.figure(figsize=(20, 20))
+    sns.clustermap(heatmap_data, 
+                       cmap="coolwarm", annot=False, method='average', 
+                       metric="euclidean", row_cluster=True, col_cluster=True, 
+                       #metric= correlation
+                       col_colors=col_colors, figsize=(10, 10),  z_score= 1)
+    # Add the legend to the plot
+    plt.legend(handles=legend_handles, title='STATE', bbox_to_anchor=(1.7, 1), loc='upper left')
+    # Set the title for the heatmap
+    # Save the heatmap to a file
+    plt.savefig(f'{outDir}/Heatmap.pdf')
+    plt.close()
+elif heatmapMetric == "correlation":
+    plt.figure(figsize=(20, 20))
+    sns.clustermap(heatmap_data, 
+                       cmap="coolwarm", annot=False, method='average', 
+                       metric="correlation", row_cluster=True, col_cluster=True, 
+                       #metric= correlation
+                       col_colors=col_colors, figsize=(10, 10),  z_score= 1)
+    # Add the legend to the plot
+    plt.legend(handles=legend_handles, title='STATE', bbox_to_anchor=(1.7, 1), loc='upper left')
+    # Set the title for the heatmap
+    # Save the heatmap to a file
+    plt.savefig(f'{outDir}/Heatmap.pdf')
+    plt.close()
+else:
+    print('ERROR: Please selecct the correct heatmap metric')
+    exit(1) 
+# Volcano Plot
+print("Export volcano Plot")
+results['FDR'] = pd.to_numeric(results['FDR'], errors='coerce')
+results['-log10(FDR)'] = -np.log10(results['FDR'])  # Replace 0 with NaN to avoid log10(0)
+# Filter volcanodata for absolute log2FoldChange > 0
+volcanodata = results[abs(results['log2FoldChange']) > 0]
+# Add a new column 'expression' with categories based on FDR and log2FoldChange
+volcanodata['expression'] = np.where(
+    (volcanodata['FDR'] < 0.01) & (abs(volcanodata['log2FoldChange']) > 0),
+    np.where(volcanodata['log2FoldChange'] > 0, 'Up', 'Down'),
+    'Not Significant'
+)
+# Create the volcano plot
+plt.figure(figsize=(10, 8))
+sns.scatterplot(
+    data=volcanodata,
+    x='log2FoldChange',
+    y='-log10(FDR)',
+    hue='expression',
+    palette={'Up': 'red', 'Down': 'blue', 'Not Significant': 'gray'},
+    alpha=0.5,
+)
+# Annotate top genes
+#plt.xlim(-1000, 1000)  # Adjust these values as needed
+#plt.ylim(0, 10) 
+# Add titles and labels
+plt.title(f"Volcano plot of {dataname}")
+plt.xlabel("log2(fold change)")
+plt.ylabel("-log10(adj-p-value)")
+# Save the volcano plot to a file
+plt.savefig(f'{outDir}/Volcanoplot.pdf')
+plt.close()
+# MDS Plot
+print("Export MDS")
+mds = MDS(n_components=2, random_state=0)
+mds_transformed = mds.fit_transform(log_counts.T)
+mds_df = pd.DataFrame(mds_transformed, columns=['Dim1', 'Dim2'])
+mds_df['Group'] = meta_data['STATE'].values
+plt.figure(figsize=(10, 8))
+sns.scatterplot(data=mds_df, x='Dim1', y='Dim2', hue='Group', palette='Set1')
+plt.title("MDS Plot")
+plt.savefig(f'{outDir}/MDS.pdf')
+plt.close()
+# PCA Plot
+print("Export PCA")
+pca = PCA(n_components=2)
+pca_transformed = pca.fit_transform(StandardScaler().fit_transform(log_counts.T))
+pca_df = pd.DataFrame(pca_transformed, columns=['PC1', 'PC2'])
+pca_df['Group'] = meta_data['STATE'].values
+plt.figure(figsize=(10, 8))
+sns.scatterplot(data=pca_df, x='PC1', y='PC2', hue='Group', palette='Set1')
+plt.title("PCA Plot")
+plt.xlabel(f"PC1: {pca.explained_variance_ratio_[0] * 100:.1f}% variance")
+plt.ylabel(f"PC2: {pca.explained_variance_ratio_[1] * 100:.1f}% variance")
+plt.savefig(f'{outDir}/PCA.pdf')
+plt.close()
+finalReport = f"""
+Data set = {count}
+Meta data = {meta}
+Number of Samples = {counts.shape[1]}
+Number of Features = {len(counts.index)}
+Contrast = {groupI} VS {groupII}
+Number of significant features = {len(results[results["FDR"] < fdr].index)} at {fdr}
+
+Thank you for using GeSeqFold
+
+"© Saifeldeen M. Ibrahim 2024"
+"""
+print(finalReport)
