@@ -7,12 +7,14 @@
 # This script is not intended for commercial use                                                    #
 #####################################################################################################
 #---------------------------- Usage and Help ----------------------#
-helptext = """GeseqFold is a robust tool designed to process transcriptomic data and perform differential gene expression analysis using linear regression models. 
-It aims to provide researchers with a streamlined, efficient way to analyze RNA-seq data, delivering clear insights into gene expression changes under various conditions.
+helptext = """GeseqFold is a tool developed to process transcriptomic data and conduct differential gene expression analysis using the ordinary least squares (OLS) regression model. 
+It accepts input data in TSV or CSV format, ensuring compatibility with most RNA-seq datasets. Users can specify experimental groups and adjust parameters for data filtration and significance thresholds. 
+It fits a linear model for each gene using OLS regression, calculates p-values for differential expression, and applies multiple testing correction using the Benjamini-Hochberg method to control the false discovery rate, 
+ensuring the reliability of identified differentially expressed genes (DEGs)
 
 Usage: GeseqFold -h [manual] -c <Count Matrix> -m <Meta Data> -fl <Filtration Level> -g1 <Group 1> -g2 <Group 2> -fdr <FDR Cutoff> -ng <nGenes> -hm <HeatMap Metric> -o <Output Dir>
 
-Parameters: <CountMatrix> <MetaData> <FiltrationLevel> <group 1> <group 2> <FDRcutoff> <nSigGenes> <HeatMapMetric> <outputDir>
+Parameters: <Count Matrix> <Meta Data> <Filtration Level> <Group 1> <Group 2> <FDR Cutoff> <nGenes> <HeatMap Metric> <Output Dir>
 
 Options:
 -h   --help           [manual]              Manual help
@@ -21,10 +23,13 @@ Options:
 -fl  --filter         <Filtration Level>    Pre filtration level to filter low expressed genes which make outliers in the Data [Int: 10, 20, 30]
 -g1  --group1         <Group 1>             The first or refrence group of samples in the experimental design [Str: Control, Normal, Treatment1,..]
 -g2  --group2         <Group 2>             The second group of samples in the meta data experimental design [Str: Disease, Infection, Treatment2,..]
--fdr --fdr            <FDR cutoff>          The level of significance utilized in the Analysis [Float: 0.05, 0.01]
+-fdr --fdr            <FDR Cutoff>          The level of significance utilized in the Analysis [Float: 0.05, 0.01]
 -ng  --ngenes         <nGenes>              The number of significant genes to visualize [int: 100, 200, ....]
 -hm  --hmat           <HeatMap Metric>      The HeatMap Metric used in the HeatMap [Str: euclidean, correlation]
 -o   --out            <Output Dir>          Output directory
+
+PS: GeseqFold currently works with two conditions or treatments (e.g., control and treatment) and applies CPM normalization. 
+Support for multiple factors and additional normalization methods will be available in the next release.
 
 "© Saifeldeen M. Ibrahim 2024"
 """
@@ -406,7 +411,7 @@ Number of Features = {len(counts.index)}
 Contrast = {groupI} VS {groupII}
 Number of significant features = {len(results[results["FDR"] < fdr].index)} at {fdr}
 
-Thank you for using GeSeqFold
+Thank you for using GeseqFold
 
 "© Saifeldeen M. Ibrahim 2024"
 """
