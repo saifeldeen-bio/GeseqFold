@@ -1,17 +1,17 @@
-# GeSeqFold
-GeSeqFold is a robust tool designed to process transcriptomic data and perform differential gene expression analysis using linear regression models. It aims to provide researchers with a streamlined, efficient way to analyze RNA-seq data, delivering clear insights into gene expression changes under various conditions. Ideal for both novice and experienced researchers, GeSeqFold ensures accurate and insightful analysis of transcriptomic datasets.
+# GeseqFold
+GeseqFold is a robust tool designed to process transcriptomic data and perform differential gene expression analysis using linear regression models. It aims to provide researchers with a streamlined, efficient way to analyze RNA-seq data, delivering clear insights into gene expression changes under various conditions. Ideal for both novice and experienced researchers, GeSeqFold ensures accurate and insightful analysis of transcriptomic datasets.
 
 **Installation:**
 
 ```bash
-git clone https://github.com/saifeldeen-bio/GeSeqFold.git
-cd GeSeqFold/
-sudo mv GeSeqFold ../path-to/usr/bin
+git clone https://github.com/saifeldeen-bio/GeseqFold.git
+cd GeseqFold/
+sudo mv GeseqFold ../path-to/usr/bin
 ```
 **Usage:**
 
 ```
-Usage: GeSeqFold -h [manual] -c <Count Matrix> -m <Meta Data> -fl <Filtration Level> -g1 <Group 1> -g2 <Group 2> -fdr <FDR Cutoff> -ng <nGenes> -hm <HeatMap Metric> -o <Output Dir>
+Usage: GeseqFold -h [manual] -c <Count Matrix> -m <Meta Data> -fl <Filtration Level> -g1 <Group 1> -g2 <Group 2> -fdr <FDR Cutoff> -ng <nGenes> -hm <HeatMap Metric> -o <Output Dir>
 ```
 
 **Parameters:**
