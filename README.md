@@ -1,6 +1,6 @@
 # GeseqFold
 GeseqFold is a tool processes transcriptomic data and conducts differential gene expression analysis using the ordinary least squares (OLS) regression model. It accepts input data in TSV or CSV format, ensuring compatibility with most RNA-seq datasets. Users can specify experimental groups, adjust parameters for data filtration and significance thresholds, fit a linear model for each gene using OLS regression, calculate p-values for differential expression, and apply multiple testing correction using the Benjamini-Hochberg method to control the false discovery rate, ensuring the reliability of identified differentially expressed genes (DEGs).
-PS: GeSeqFold currently works with two conditions or treatments (e.g., control and treatment) and applies CPM normalization. Support for multiple factors and additional normalization methods will be available in the next release..
+PS: GeSeqFold currently works with two conditions or treatments (e.g., control and treatment) and applies CPM normalization. Support for multiple factors and additional normalization methods will be available in the next release.
 
 **Installation:**
 
