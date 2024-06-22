@@ -7,10 +7,10 @@
 # This script is not intended for commercial use                                                    #
 #####################################################################################################
 #----------------------------- Usage and Help ----------------------#
-helptext = """GeSeqFold is a robust tool designed to process transcriptomic data and perform differential gene expression analysis using linear regression models. 
+helptext = """GeseqFold is a robust tool designed to process transcriptomic data and perform differential gene expression analysis using linear regression models. 
 It aims to provide researchers with a streamlined, efficient way to analyze RNA-seq data, delivering clear insights into gene expression changes under various conditions.
 
-Usage: GeSeqFold -h [manual] -c <Count Matrix> -m <Meta Data> -fl <Filtration Level> -g1 <Group 1> -g2 <Group 2> -fdr <FDR Cutoff> -ng <nGenes> -hm <HeatMap Metric> -o <Output Dir>
+Usage: GeseqFold -h [manual] -c <Count Matrix> -m <Meta Data> -fl <Filtration Level> -g1 <Group 1> -g2 <Group 2> -fdr <FDR Cutoff> -ng <nGenes> -hm <HeatMap Metric> -o <Output Dir>
 
 Parameters: <CountMatrix> <MetaData> <FiltrationLevel> <group 1> <group 2> <FDRcutoff> <nSigGenes> <HeatMapMetric> <outputDir>
 
@@ -28,7 +28,7 @@ Options:
 
 "© Saifeldeen M. Ibrahim 2024"
 """
-usage = """Usage: GeSeqFold -h [manual] -c <CountMatrix> -m <MetaData> -fl <FiltrationLevel> -g1 <group 1> -g2 <group 2> -fdr <FDRcutoff> -ng <nSigGenes> -hm <HeatMapMetric> -o <outputDir>"""
+usage = """Usage: GeseqFold -h [manual] -c <Count Matrix> -m <Meta Data> -fl <Filtration Level> -g1 <Group 1> -g2 <Group 2> -fdr <FDR cutoff> -ng <nGenes> -hm <HeatMap Metric> -o <Output Dir>"""
 #----------------------------- Import Modules ----------------------#
 import os
 import sys
