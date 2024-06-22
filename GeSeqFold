@@ -6,7 +6,7 @@
 # Disclaimer: The script comes with no warranty, use at your own risk                               #
 # This script is not intended for commercial use                                                    #
 #####################################################################################################
-#----------------------------- Usage and Help ----------------------#
+#---------------------------- Usage and Help ----------------------#
 helptext = """GeseqFold is a robust tool designed to process transcriptomic data and perform differential gene expression analysis using linear regression models. 
 It aims to provide researchers with a streamlined, efficient way to analyze RNA-seq data, delivering clear insights into gene expression changes under various conditions.
 
