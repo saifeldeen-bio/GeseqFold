@@ -19,7 +19,7 @@ Usage: GeseqFold -h [manual] -c <Count Matrix> -m <Meta Data> -fl <Filtration Le
 - `<Meta Data>`: Meta data consisting of two columns 'SAMPLE and STATE' [File: Must be in a tsv or a csv format] .
 - `<Filtration Level>`: Pre filtration level to filter low expressed genes which make outliers in the Data [Int: 10, 20, 30].
 - `<Group 1>`: The first or refrence group of samples in the experimental design [Str: Control, Normal, Treatment1,..].
-- `<Group 2>`: The second group of samples in the meta data experimental design [Str: Disease, Infection, Treatment2,..].
+- `<Group 2>`: The second group of samples in the experimental design [Str: Disease, Infection, Treatment2,..].
 - `<FDR cutoff>`: The level of significance utilized in the Analysis [Float: 0.05, 0.01].
 - `<nGenes>`: The number of significant genes to visualize [int: 100, 200, ....].
 - `<HeatMap Metric>`: The HeatMap Metric used in the HeatMap [Str: euclidean, correlation].
